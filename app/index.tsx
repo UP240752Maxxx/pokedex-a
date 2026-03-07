@@ -1,33 +1,36 @@
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import PokemonCard from "./components/PokemonCard";
 
 export default function Index() {
   const [results, setResults] = useState<any[]>([]);
+
   useEffect(() => {
-    console.log("Entre entre en plantalla");
     getPokemons();
   }, []);
   
-  const getPokemons = async () => { 'getPokemons'
-    const URL = "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
-    const response = await fetch(URL, {
-      method: "GET",
-    });
-    console.log(response);
-    const data = await response.json();
-    console.log(data.results);
-    setResults(data.results);
+  const getPokemons = async () => {
+    try {
+      const URL = "https://pokeapi.co/api/v2/pokemon?limit=50&offset=0";
+      const response = await fetch(URL);
+      const data = await response.json();
+      setResults(data.results);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <View>
-      {
-      
-      results.map((item) => {
-        return <Text key={item.name}>{item.name}</Text>
-      })
-      
-      }
+    <View style={{ flex: 1 }}> 
+      <ScrollView>
+        {results.map((item) => (
+          <PokemonCard 
+            key={item.name} 
+            name={item.name} 
+            url={item.url} 
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
