@@ -8,11 +8,13 @@ export default function Index() {
   useEffect(() => {
     getPokemons();
   }, []);
-  
+
   const getPokemons = async () => {
     try {
-      const URL = "https://pokeapi.co/api/v2/pokemon?limit=50&offset=0";
-      const response = await fetch(URL);
+      const URL = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0";
+      const response = await fetch(URL, {
+        method: "GET",
+      });
       const data = await response.json();
       setResults(data.results);
     } catch (error) {
@@ -21,15 +23,17 @@ export default function Index() {
   };
 
   return (
-    <View style={{ flex: 1 }}> 
+    <View style={{ flex: 1 }}>
       <ScrollView>
-        {results.map((item) => (
-          <PokemonCard 
-            key={item.name} 
-            name={item.name} 
-            url={item.url} 
-          />
-        ))}
+        <View>
+          {results.map((item) => (
+            <PokemonCard 
+              key={item.name} 
+              name={item.name} 
+              url={item.url} 
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
